@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,6 +57,33 @@ function calcPayment(financedInclVat: number, residualInclVat: number, months: n
   return (financedInclVat - residualInclVat / Math.pow(1 + r, months)) * r / (1 - Math.pow(1 + r, -months));
 }
 
+type ResidualSolveResult =
+  | {
+      ok: true;
+      residualInclVat: number;
+      totalMonthlyPaymentsInclVat: number;
+      depreciationPaidInclVat: number;
+      interestPaid: number;
+    }
+  | {
+      ok: false;
+      message: string;
+    };
+
+type RateSolveResult =
+  | {
+      ok: true;
+      nominalRate: number;
+      effectiveRate: number;
+      totalMonthlyPaymentsInclVat: number;
+      depreciationPaidInclVat: number;
+      interestPaid: number;
+    }
+  | {
+      ok: false;
+      message: string;
+    };
+
 function solveResidualFromPayment({
   financedInclVat,
   monthlyPaymentInclVat,
@@ -67,7 +94,7 @@ function solveResidualFromPayment({
   monthlyPaymentInclVat: number;
   months: number;
   nominalRate: number;
-}) {
+}): ResidualSolveResult {
   if (financedInclVat <= 0 || monthlyPaymentInclVat <= 0 || months <= 0) {
     return { ok: false, message: "Enter valid financed amount, monthly payment, and duration." };
   }
@@ -105,7 +132,7 @@ function solveRateFromResidual({
   monthlyPaymentInclVat: number;
   residualInclVat: number;
   months: number;
-}) {
+}): RateSolveResult {
   if (financedInclVat <= 0 || monthlyPaymentInclVat <= 0 || residualInclVat < 0 || months <= 0) {
     return { ok: false, message: "Enter valid financed amount, monthly payment, residual, and duration." };
   }

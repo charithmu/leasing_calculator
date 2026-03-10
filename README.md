@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# Leasing Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite + React + TypeScript app for checking Swiss leasing calculations, including VAT-aware residual value and implied interest rate calculations.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Calculates residual value from financed amount, term, monthly payment, and nominal rate.
+- Calculates implied nominal and effective rates from a known residual value.
+- Handles Swiss VAT differences between gross financed values and residual values shown excluding VAT.
+- Includes an AMAG-style test case for quick verification.
 
-## React Compiler
+## Local development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Requirements:
 
-## Expanding the ESLint configuration
+- Node.js 20+
+- npm
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Install dependencies:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start the dev server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+The app will be available at the local Vite URL printed in the terminal.
+
+## Quality checks
+
+Lint the project:
+
+```bash
+npm run lint
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Vercel deployment
+
+This repository includes [vercel.json](./vercel.json) with the expected Vite settings:
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Framework: `vite`
+
+To deploy:
+
+1. Push the repository to GitHub.
+2. Import the repo into Vercel.
+3. Confirm the project settings if prompted.
+4. Deploy.
+
+For this app, no additional environment variables are required.
+
+## Project structure
+
+- `src/App.tsx`: main leasing calculator UI and business logic.
+- `src/components/ui/`: reusable UI primitives.
+- `src/lib/utils.ts`: shared utility helpers.
+- `src/index.css`: theme and Tailwind styling.
+
+## Notes
+
+The production build and lint checks have been verified locally with:
+
+- `npm run lint`
+- `npm run build`
